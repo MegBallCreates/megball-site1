@@ -415,13 +415,16 @@ body::after{content:"";position:fixed;inset:0;z-index:9990;pointer-events:none;o
 .cam{position:relative;z-index:1;display:block;width:100%;padding:0;border:0;background:none;cursor:pointer;filter:drop-shadow(0 18px 22px rgba(15,22,34,.22));transform-origin:50% 90%}
 .cam img{display:block;width:100%;height:auto;max-width:100%}
 .cam:focus-visible{outline:3px solid var(--blue);outline-offset:6px;border-radius:24px}
-.cam .flash{position:absolute;left:81.8%;top:32.4%;width:0;height:0;border-radius:50%;pointer-events:none;box-shadow:0 0 0 0 rgba(255,255,255,0);opacity:0}
+.cam .flash{position:absolute;left:81.1%;top:18.4%;width:0;height:0;border-radius:50%;pointer-events:none;box-shadow:0 0 0 0 rgba(255,255,255,0);opacity:0}
+.cam .flashpop{position:absolute;inset:0;border-radius:6%;background:#fff;opacity:0;pointer-events:none;mix-blend-mode:screen}
 .cam.shoot{animation:shutter .38s cubic-bezier(.3,1.6,.5,1)}
-.cam.shoot .flash{animation:flash .7s ease-out}
+.cam.shoot .flash{animation:flash .75s ease-out}
+.cam.shoot .flashpop{animation:flashpop .5s ease-out}
 @keyframes shutter{0%{transform:none}30%{transform:translateY(3px) scale(.985)}100%{transform:none}}
-@keyframes flash{0%{opacity:1;box-shadow:0 0 30px 34px rgba(255,255,255,.95),0 0 120px 90px rgba(255,255,255,.55)}100%{opacity:0;box-shadow:0 0 60px 70px rgba(255,255,255,0),0 0 200px 160px rgba(255,255,255,0)}}
+@keyframes flash{0%{opacity:1;box-shadow:0 0 40px 46px rgba(255,255,255,1),0 0 160px 120px rgba(255,255,255,.65)}100%{opacity:0;box-shadow:0 0 70px 80px rgba(255,255,255,0),0 0 220px 180px rgba(255,255,255,0)}}
+@keyframes flashpop{0%{opacity:0}10%{opacity:.92}35%{opacity:.2}100%{opacity:0}}
 /* the film exits from the front slot: this box starts at the slot line */
-.eject{position:relative;z-index:2;margin:-10.1% 12% 0}
+.eject{position:relative;z-index:2;margin:-7.6% 12% 0}
 .portrait .tilt{position:relative;width:100%;margin:0}
 .polaroid{position:relative;margin:0;background:var(--paperwhite);padding:10px 10px 44px;border-radius:2px;box-shadow:0 1px 1px rgba(0,0,0,.08),0 18px 40px -16px rgba(15,22,34,.45);transform:rotate(2.5deg);transform-origin:50% 0;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .pol-photo{position:relative;aspect-ratio:1;overflow:hidden;background:#1a1d22}
@@ -571,8 +574,9 @@ main{overflow-x:clip}
     <div class="portrait" id="portrait">
       <div class="camwrap">
         <button class="cam" id="camBtn" type="button" aria-label="Take another photo">
-          <img src="assets/work/camera.webp" alt="" width="720" height="673">
+          <img src="assets/work/camera.webp" alt="" width="900" height="681">
           <span class="flash" aria-hidden="true"></span>
+          <span class="flashpop" aria-hidden="true"></span>
         </button>
         <div class="eject">
       <div class="tilt" id="tilt">
