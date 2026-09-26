@@ -520,6 +520,18 @@ html.has-cursor input[type="text"],html.has-cursor input[type="search"]{cursor:t
 
 @media (prefers-reduced-motion:reduce){.stamp .ring-text{animation:none}}
 main{overflow-x:clip}
+/* ---------- case 04: playable ---------- */
+.play-card{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(22px,4vw,56px);align-items:center;background:var(--sky-soft);border:1px solid var(--line);border-radius:26px;padding:clamp(18px,3.4vw,40px)}
+.play-shot{position:relative;display:block;max-width:420px;justify-self:center;width:100%;border-radius:18px;overflow:hidden;background:#AECDEB;box-shadow:var(--shadow);transform:rotate(-1.5deg);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.play-shot:hover{transform:rotate(0) scale(1.02)}
+.play-shot img{display:block;width:100%;height:auto}
+.play-shot .live{position:absolute;left:14px;top:14px;display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;background:var(--paperwhite);color:var(--pencil);font:700 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;box-shadow:0 4px 12px -6px rgba(15,22,34,.5)}
+.play-shot .live i{width:8px;height:8px;border-radius:50%;background:#2FAF5B;box-shadow:0 0 0 3px rgba(47,175,91,.25)}
+.play-copy .flow{margin-top:4px}
+.play-card .flow li::before{background:var(--paper-2);box-shadow:0 0 0 1px var(--line)}
+.play-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin-top:24px}
+@media (max-width:860px){.play-card{grid-template-columns:minmax(0,1fr)}.play-shot{max-width:340px}}
+
 
 </style>
 
@@ -618,11 +630,12 @@ main{overflow-x:clip}
       </div>
       <div>
         <p class="intro-quote">It used to begin with a <em>sketch</em>. Now it begins with a <em>conversation</em>.</p>
-        <p class="intro-copy">I treat every new model like a new teammate. I figure out what it's good at, wire it into a real creative workflow, and write down what I learned so other people can skip the 2am part. Here are three builds I'm proud of.</p>
+        <p class="intro-copy">I treat every new model like a new teammate. I figure out what it's good at, wire it into a real creative workflow, and write down what I learned so other people can skip the 2am part. Here are four builds I'm proud of, and you can play the last one.</p>
         <ul class="case-links">
           <li><a href="#case-orchid"><img src="assets/work/on-p3.jpg" alt="" loading="lazy"><div><b>Mood → market</b><span>A full product line from one moodboard</span></div><i>01</i></a></li>
           <li><a href="#case-extract"><img src="assets/work/ex-1a.jpg" alt="" loading="lazy"><div><b>Editorial → tech pack</b><span>Pulling the garment out of the picture</span></div><i>02</i></a></li>
           <li><a href="#case-moon"><img src="assets/work/tm-boot.jpg" alt="" loading="lazy"><div><b>Idea → product page</b><span>From a conversation to a PDP</span></div><i>03</i></a></li>
+          <li><a href="#case-slot"><img src="assets/work/slot-machine.jpg" alt="" loading="lazy"><div><b>Colorway Slot Machine</b><span>Pull the lever and try it</span></div><i>04</i></a></li>
         </ul>
       </div>
     </div>
@@ -801,6 +814,37 @@ main{overflow-x:clip}
         <figure><img class="zoomable" src="assets/work/tm-pdp2.jpg" alt="Grey satin gown with white collar, product flat" loading="lazy"></figure>
         <figure><img class="zoomable" src="assets/work/tm-pdp6.jpg" alt="On-model white tulle gown with black harness" loading="lazy"></figure>
         <figure><img class="zoomable" src="assets/work/tm-ed1.jpg" alt="Campaign image: black feathered mermaid gown" loading="lazy"></figure>
+      </div>
+    </article>
+
+
+    <!-- CASE 04 -->
+    <article class="case" id="case-slot">
+      <div class="case-head">
+        <div class="case-no">04</div>
+        <div>
+          <div class="label">Play it · Colorway Slot Machine</div>
+          <h3>Every pull is a merch decision.</h3>
+          <p>A colorway tool you can play. The reels set the brief with a season, a customer and a mood. Claude looks at the garment flat, picks a color for each part, and explains the call the way a color lead would in line review.</p>
+        </div>
+      </div>
+      <div class="play-card">
+        <a class="play-shot" href="https://claude.ai/artifact/6EKee8JWMxaGtcZxYa4qV7" target="_blank" rel="noopener" aria-label="Open the Colorway Slot Machine in a new tab">
+          <img src="assets/work/slot-machine.jpg" alt="The Colorway Slot Machine: a pink and periwinkle slot machine with a skirt flat in the window and reels for season, customer and mood" loading="lazy">
+          <span class="live"><i aria-hidden="true"></i>Live</span>
+        </a>
+        <div class="play-copy">
+          <ol class="flow">
+            <li><div><b>Pull the lever</b><span>Season, customer and mood reels set the brief. Hold any reel you want to keep.</span></div></li>
+            <li><div><b>Claude colors the flat</b><span>One color for each part of the garment, with a name and hex code.</span></div></li>
+            <li><div><b>Read the reasoning</b><span>Every colorway comes with the thinking behind it.</span></div></li>
+            <li><div><b>Make it yours</b><span>Upload your own flat, lock colors, limit it to your season's palette, or write your own reels.</span></div></li>
+          </ol>
+          <div class="play-actions">
+            <a class="btn primary" href="https://claude.ai/artifact/6EKee8JWMxaGtcZxYa4qV7" target="_blank" rel="noopener">Pull the lever <span class="go" aria-hidden="true">↗</span></a>
+            <span class="scribble" aria-hidden="true">psst… some combos hit the jackpot</span>
+          </div>
+        </div>
       </div>
     </article>
 
@@ -1229,6 +1273,7 @@ document.querySelectorAll('#work img.zoomable').forEach(function(img){
     {g:'Case studies',t:'Mood → market',s:'Orchid Nebula',k:'claude prompts json product line capsule pricing sku merchandising line plan',h:'#case-orchid',i:'01'},
     {g:'Case studies',t:'Editorial → tech pack',s:'garment extraction',k:'weavy nano banana pattern print flat sketch slider extract',h:'#case-extract',i:'02'},
     {g:'Case studies',t:'Idea → product page',s:'To the Moon',k:'pdp ecommerce campaign llm briefs canvas celestial',h:'#case-moon',i:'03'},
+    {g:'Case studies',t:'Colorway Slot Machine',s:'play it live',k:'slot machine colorway color palette game play try demo jackpot',h:'#case-slot',i:'04'},
     {g:'Case studies',t:'AI should be fun',s:'from the lab',k:'bananas consistency character pickle eggplant habanero fun',h:'#lab',i:'✦'},
     {g:'Case studies',t:'The tool relay',s:'Midjourney → Raspberry AI',k:'midjourney raspberry off-body orchestration',h:'#lab',i:'✦'},
     {g:'On stage',t:'Sourcing Journal 2026 Visionary',s:'award',k:'award recognition visions of tomorrow',u:'https://www.events.sourcingjournal.com/visionsoftomorrow26',i:'★'},
@@ -1315,6 +1360,7 @@ document.querySelectorAll('#work img.zoomable').forEach(function(img){
       var cls='', txt='';
       if(!t||!t.closest){}
       else if(t.closest('.ba')){cls='is-drag';txt='drag';}
+      else if(t.closest('.play-shot')){cls='is-view';txt='play';}
       else if(t.closest('img.zoomable')){cls='is-view';txt='view';}
       else if(t.closest('input[type="text"],input[type="search"]')){cls='is-text';}
       else if(t.closest('a,button,[role="button"],[role="option"],summary,label')){cls='is-link';}
