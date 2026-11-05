@@ -71,6 +71,10 @@ body { background: var(--ground); color: var(--ink); font-family: var(--display)
 .node.on { border-color: var(--pale); box-shadow: 0 0 0 6px rgba(169,203,242,.14), 0 40px 80px rgba(0,0,0,.55); cursor: default; }
 .node-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 26px 0;
   font-family: var(--mono); font-size: 18px; letter-spacing: .06em; color: var(--pale); text-transform: uppercase; }
+.node-head { cursor: grab; touch-action: none; user-select: none; }
+.node-head:hover span:last-child { color: var(--pale); }
+.node.moving { transition: none !important; z-index: 5; box-shadow: 0 0 0 6px rgba(169,203,242,.18), 0 60px 120px rgba(0,0,0,.65); }
+.node.moving .node-head, #viewport.moving-node { cursor: grabbing; }
 .node-head span:last-child { color: var(--ink-3); letter-spacing: .2em; }
 .node-body { padding: 18px 26px 28px; display: grid; gap: 22px; }
 .node h2 { font-weight: 400; font-size: 46px; line-height: 1.08; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
@@ -336,7 +340,7 @@ function layout() {
   let y = 0; const rowY = {};
   Object.keys(rows).sort((a, b) => a - b).forEach(r => { rowY[r] = y; y += rows[r] + ROWGAP; });
   NODES.forEach(n => {
-    n.x = n.col * COL + (COL - 150 - n.w) / 2 + 75; n.y = rowY[n.row] + (rows[n.row] - n.el.offsetHeight) / 2;
+    n.x = n.col * COL + (COL - 150 - n.w) / 2 + 75 + (n.dx || 0); n.y = rowY[n.row] + (rows[n.row] - n.el.offsetHeight) / 2 + (n.dy || 0);
     n.h = n.el.offsetHeight; n.el.style.left = n.x + "px"; n.el.style.top = n.y + "px";
   });
   drawWires();
@@ -434,16 +438,32 @@ addEventListener("keydown", e => {
 });
 
 // ---- pan, zoom, click-to-focus
-const ptrs = new Map(); let drag = null, pinch = null;
+const ptrs = new Map(); let drag = null, pinch = null, nodeDrag = null;
 vp.addEventListener("pointerdown", e => {
   if (e.target.closest("video, button, a")) return;
   vp.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
   cancelAnimationFrame(anim);
+  const head = e.target.closest(".node-head");
+  if (head && ptrs.size === 1) {
+    const n = NODES.find(m => m.el === head.parentElement);
+    nodeDrag = { n, x: e.clientX, y: e.clientY, ox: n.x, oy: n.y, odx: n.dx || 0, ody: n.dy || 0, moved: false };
+    return;
+  }
+  nodeDrag = null;
   if (ptrs.size === 1) drag = { x: e.clientX, y: e.clientY, cx: cam.x, cy: cam.y, moved: false, el: e.target.closest(".node"), t: e.target };
   if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), s: cam.s, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2, cx: cam.x, cy: cam.y }; drag = null; }
 });
 vp.addEventListener("pointermove", e => {
   if (!ptrs.has(e.pointerId)) return; ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (nodeDrag) {
+    const g = nodeDrag, dx = (e.clientX - g.x) / cam.s, dy = (e.clientY - g.y) / cam.s;
+    if (!g.moved && Math.abs(e.clientX - g.x) + Math.abs(e.clientY - g.y) > 4) { g.moved = true; g.n.el.classList.add("moving"); vp.classList.add("moving-node"); }
+    if (g.moved) {
+      g.n.x = g.ox + dx; g.n.y = g.oy + dy; g.n.dx = g.odx + dx; g.n.dy = g.ody + dy;
+      g.n.el.style.left = g.n.x + "px"; g.n.el.style.top = g.n.y + "px"; drawWires();
+    }
+    return;
+  }
   if (pinch && ptrs.size === 2) {
     const [a, b] = [...ptrs.values()], s = Math.max(.05, Math.min(2, pinch.s * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d));
     cam.x = pinch.mx - (pinch.mx - pinch.cx) * s / pinch.s; cam.y = pinch.my - (pinch.my - pinch.cy) * s / pinch.s; cam.s = s; apply();
@@ -455,6 +475,11 @@ vp.addEventListener("pointermove", e => {
 });
 const end = e => {
   ptrs.delete(e.pointerId); vp.classList.remove("dragging");
+  if (nodeDrag) {
+    const g = nodeDrag; nodeDrag = null; g.n.el.classList.remove("moving"); vp.classList.remove("moving-node");
+    if (!g.moved && g.n.i !== current) focusNode(g.n.i);
+    return;
+  }
   if (drag && !drag.moved && drag.el) {
     const i = NODES.findIndex(n => n.el === drag.el);
     if (i !== current) focusNode(i);
@@ -462,6 +487,10 @@ const end = e => {
   }
   if (ptrs.size < 2) pinch = null; drag = null;
 };
+vp.addEventListener("dblclick", e => {
+  const head = e.target.closest(".node-head"); if (!head) return;
+  const n = NODES.find(m => m.el === head.parentElement); n.dx = n.dy = 0; layout();
+});
 vp.addEventListener("pointerup", end); vp.addEventListener("pointercancel", end);
 vp.addEventListener("wheel", e => {
   e.preventDefault(); cancelAnimationFrame(anim);
