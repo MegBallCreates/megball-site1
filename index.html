@@ -68,13 +68,13 @@ body { background: var(--ground); color: var(--ink); font-family: var(--display)
 .node { position: absolute; background: var(--card); border: 2px solid var(--card-line); border-radius: 22px;
   box-shadow: 0 30px 60px rgba(0,0,0,.45); cursor: pointer; transition: border-color .3s, box-shadow .3s; }
 .node:hover { border-color: #4a4c55; }
-.node.on { border-color: var(--pale); box-shadow: 0 0 0 6px rgba(169,203,242,.14), 0 40px 80px rgba(0,0,0,.55); cursor: default; }
+.node.on { border-color: var(--pale); box-shadow: 0 0 0 6px rgba(169,203,242,.14), 0 40px 80px rgba(0,0,0,.55); cursor: grab; }
 .node-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 26px 0;
   font-family: var(--mono); font-size: 18px; letter-spacing: .06em; color: var(--pale); text-transform: uppercase; }
-.node-head { cursor: grab; touch-action: none; user-select: none; }
+.node { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; } .node img { -webkit-user-drag: none; user-drag: none; }
 .node-head:hover span:last-child { color: var(--pale); }
 .node.moving { transition: none !important; z-index: 5; box-shadow: 0 0 0 6px rgba(169,203,242,.18), 0 60px 120px rgba(0,0,0,.65); }
-.node.moving .node-head, #viewport.moving-node { cursor: grabbing; }
+.node.moving, .node.moving *, #viewport.moving-node { cursor: grabbing !important; }
 .node-head span:last-child { color: var(--ink-3); letter-spacing: .2em; }
 .node-body { padding: 18px 26px 28px; display: grid; gap: 22px; }
 .node h2 { font-weight: 400; font-size: 46px; line-height: 1.08; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
@@ -298,7 +298,64 @@ const NODES = [
     <h2>beneath the <span class="acc">seam.</span></h2>
     <p class="lede">A study in structure: couture rendered like an x-ray, so the body under the tailoring becomes part of the design. Oxblood, ivory and ash, one plate per part of the frame.</p>
     <div class="ggrid" style="grid-template-columns:repeat(4,1fr)"><figure><img class="gallery-img" src="assets/img/cc6a5eb454.jpg" alt="Plate 01 · Cranium · Skull & silk" loading="lazy"><figcaption>Plate 01 · Cranium · Skull & silk</figcaption></figure><figure><img class="gallery-img" src="assets/img/b76c2f7aa0.jpg" alt="Plate 02 · Face · Pearl, glass, bone" loading="lazy"><figcaption>Plate 02 · Face · Pearl, glass, bone</figcaption></figure><figure><img class="gallery-img" src="assets/img/43755b3787.jpg" alt="Plate 03 · Thorax · Ribs under tailoring" loading="lazy"><figcaption>Plate 03 · Thorax · Ribs under tailoring</figcaption></figure><figure><img class="gallery-img" src="assets/img/0a3b797e03.jpg" alt="Plate 04 · Pelvis · The belt holds the frame" loading="lazy"><figcaption>Plate 04 · Pelvis · The belt holds the frame</figcaption></figure><figure><img class="gallery-img" src="assets/img/c5e473ed48.jpg" alt="Plate 05 · Extremities · Where the bone ends" loading="lazy"><figcaption>Plate 05 · Extremities · Where the bone ends</figcaption></figure><figure><img class="gallery-img" src="assets/img/a1f520d2cb.jpg" alt="Plate 06 · Objects · Velvet, lit from within" loading="lazy"><figcaption>Plate 06 · Objects · Velvet, lit from within</figcaption></figure><figure><img class="gallery-img" src="assets/img/a06c111847.jpg" alt="Plate 07 · Objects · A brooch, x-rayed" loading="lazy"><figcaption>Plate 07 · Objects · A brooch, x-rayed</figcaption></figure><figure><img class="gallery-img" src="assets/img/766df4d9fb.jpg" alt="Beneath the Seam" loading="lazy"><figcaption>Beneath the Seam</figcaption></figure></div>` },
-  { id: "how-i-work", label: "how I work", col: 1, row: 2, w: 1200, html: `
+  { id: "fuse", label: "from the lab · look → flat → print", col: 1, row: 2, w: 1300, html: `
+    <h2>one print, every <span class="acc">format.</span></h2>
+    <p class="lede">A watermelon-and-moss story carried from the runway look to the technical flat to the repeat itself, so the print a designer falls for is the one a mill can actually make.</p>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/fuse-06.jpg" alt="Look" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/fuse-09.jpg" alt="Look" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/fuse-11.jpg" alt="Look" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/fuse-12.jpg" alt="Look" loading="lazy"></div>
+    <div class="strip"><img class="media" style="--ar:1.0" src="assets/lab/fuse-13.jpg" alt="Technical flat" loading="lazy"><img class="media" style="--ar:1.0" src="assets/lab/fuse-14.jpg" alt="Technical flat" loading="lazy"><img class="media" style="--ar:1.0" src="assets/lab/fuse-15.jpg" alt="Technical flat" loading="lazy"><img class="media" style="--ar:1.0" src="assets/lab/fuse-16.jpg" alt="Technical flat" loading="lazy"></div>
+    <div class="strip"><img class="media" style="--ar:1.0" src="assets/lab/fuse-20.jpg" alt="Print and accessory" loading="lazy"><img class="media" style="--ar:1.0" src="assets/lab/fuse-22.jpg" alt="Print and accessory" loading="lazy"><img class="media" style="--ar:1.0" src="assets/lab/fuse-26.jpg" alt="Print and accessory" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/fuse-02.jpg" alt="Print and accessory" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/fuse-05.jpg" alt="Print and accessory" loading="lazy"></div>
+    <div class="row4"><div class="stat"><span class="label">01</span><b class="stepb">Render the look.</b><span>Fuzzy, blurred knit stories on the body, shot like a campaign.</span></div><div class="stat"><span class="label">02</span><b class="stepb">Flatten it.</b><span>Each look becomes a clean front flat, ready for a spec.</span></div><div class="stat"><span class="label">03</span><b class="stepb">Lift the repeat.</b><span>The print comes off the garment as its own seamless tile.</span></div><div class="stat"><span class="label">04</span><b class="stepb">Carry it over.</b><span>The same print runs onto shoes and bags.</span></div></div>` },
+  { id: "after-dark", label: "from the lab · halloween 2026", col: 2, row: 2, w: 1300, html: `
+    <h2>a study in beautiful <span class="acc">strangeness.</span></h2>
+    <div class="split" style="grid-template-columns:0.8fr 1.5fr">
+      <video class="media" src="assets/lab/v-afterdark.mp4" poster="assets/lab/v-afterdark-poster.jpg" muted loop playsinline autoplay controls preload="metadata" aria-label="After Dark, 40 second cut"></video>
+      <div style="display:grid;gap:20px;align-content:start">
+        <p class="lede">Two Halloween stories: <b>After Dark</b>, a monochrome portrait series, and <b>Skeletal</b>, couture with the bones on the outside. Stills first, then motion.</p>
+        <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/halloween26-01.jpg" alt="After Dark" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/halloween26-04.jpg" alt="After Dark" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/halloween26-07.jpg" alt="After Dark" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/halloween26-17.jpg" alt="After Dark" loading="lazy"></div>
+        <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/halloween26-14.jpg" alt="After Dark: objects" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/halloween26-15.jpg" alt="After Dark: objects" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/halloween26-16.jpg" alt="After Dark: objects" loading="lazy"><img class="media" style="--ar:0.562" src="assets/lab/halloween26-23.jpg" alt="After Dark: objects" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/skeleton-03.jpg" alt="Skeletal" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/skeleton-08.jpg" alt="Skeletal" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/skeleton-10.jpg" alt="Skeletal" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/skeleton-11.jpg" alt="Skeletal" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/skeleton-18.jpg" alt="Skeletal" loading="lazy"></div>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/skeleton-14.jpg" alt="Skeletal: objects and runway" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/skeleton-15.jpg" alt="Skeletal: objects and runway" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/skeleton-16.jpg" alt="Skeletal: objects and runway" loading="lazy"><img class="media" style="--ar:0.746" src="assets/lab/skeleton-21.jpg" alt="Skeletal: objects and runway" loading="lazy"><img class="media" style="--ar:0.746" src="assets/lab/skeleton-22.jpg" alt="Skeletal: objects and runway" loading="lazy"><img class="media" style="--ar:0.746" src="assets/lab/skeleton-27.jpg" alt="Skeletal: objects and runway" loading="lazy"></div>
+    <p class="tools">motion · Kling 3</p>` },
+  { id: "bloom-room", label: "from the lab · editorial", col: 3, row: 2, w: 1300, html: `
+    <h2>a look, then a whole <span class="acc">world.</span></h2>
+    <p class="lede">Two editorial stories. One is saturated and sculptural, all feathers, beads and petals. The other is a powder-pink study in volume, fur and soft tailoring.</p>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/v82-09.jpg" alt="Editorial" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/v82-11.jpg" alt="Editorial" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/v82-14.jpg" alt="Editorial" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/v82-15.jpg" alt="Editorial" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/v82-17.jpg" alt="Editorial" loading="lazy"></div>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/v82-19.jpg" alt="Editorial" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/v82-05.jpg" alt="Editorial" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/v82-07.jpg" alt="Editorial" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/v82-21.jpg" alt="Editorial" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/v82-22.jpg" alt="Editorial" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/v82-28.jpg" alt="Editorial" loading="lazy"></div>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-02.jpg" alt="Powder Puff" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-03.jpg" alt="Powder Puff" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-09.jpg" alt="Powder Puff" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-13.jpg" alt="Powder Puff" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-15.jpg" alt="Powder Puff" loading="lazy"></div>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-18.jpg" alt="Powder Puff" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-20.jpg" alt="Powder Puff" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-26.jpg" alt="Powder Puff" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-07.jpg" alt="Powder Puff" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/powderpuff-29.jpg" alt="Powder Puff" loading="lazy"></div>` },
+  { id: "thorne", label: "from the lab · a label from scratch", col: 3, row: 3, w: 1300, html: `
+    <h2>soft, with <span class="acc">consequences.</span></h2>
+    <div class="split" style="grid-template-columns:1.5fr 0.8fr">
+      <video class="media" src="assets/lab/v-thorne.mp4" poster="assets/lab/v-thorne-poster.jpg" muted loop playsinline autoplay controls preload="metadata" aria-label="Thorne brand book"></video>
+      <p class="lede">Thorne is a label I made up and built end to end: the garden editorial, a dusk palette pulled from the field, eight pieces, a social launch and clean product shots for every piece.</p>
+    </div>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/thorne-01.jpg" alt="The Garden Drop" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/thorne-03.jpg" alt="The Garden Drop" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/thorne-06.jpg" alt="The Garden Drop" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/thorne-08.jpg" alt="The Garden Drop" loading="lazy"></div>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/thorne-10.jpg" alt="Social launch" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/thorne-11.jpg" alt="Social launch" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/thorne-12.jpg" alt="Social launch" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/thorne-15.jpg" alt="Social launch" loading="lazy"></div>
+    <div class="strip"><img class="media" style="--ar:1.0" src="assets/lab/thorne-19.jpg" alt="Product" loading="lazy"><img class="media" style="--ar:0.666" src="assets/lab/thorne-21.jpg" alt="Product" loading="lazy"><img class="media" style="--ar:1.0" src="assets/lab/thorne-22.jpg" alt="Product" loading="lazy"><img class="media" style="--ar:1.0" src="assets/lab/thorne-23.jpg" alt="Product" loading="lazy"><img class="media" style="--ar:0.666" src="assets/lab/thorne-27.jpg" alt="Product" loading="lazy"></div>
+    <div class="row4"><div class="stat"><span class="label">01</span><b class="stepb">The field.</b><span>A rose-bush editorial sets the mood.</span></div><div class="stat"><span class="label">02</span><b class="stepb">The palette.</b><span>Dusk colors pulled straight from the shoot.</span></div><div class="stat"><span class="label">03</span><b class="stepb">Eight pieces.</b><span>Every piece in the drop shares one language.</span></div><div class="stat"><span class="label">04</span><b class="stepb">The launch.</b><span>Social posts and product shots, ready to sell.</span></div></div>` },
+  { id: "checkered", label: "from the lab · menswear & bags", col: 2, row: 3, w: 1300, html: `
+    <h2>check, velvet, <span class="acc">fur.</span></h2>
+    <p class="lede">A menswear-leaning story that mixes harlequin check, crushed velvet and faux fur, with the bags built from the same fabrics.</p>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/checkered-09.jpg" alt="Look" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/checkered-10.jpg" alt="Look" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/checkered-19.jpg" alt="Look" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/checkered-22.jpg" alt="Look" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/checkered-23.jpg" alt="Look" loading="lazy"></div>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/checkered-27.jpg" alt="Look and bag" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/checkered-29.jpg" alt="Look and bag" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/checkered-14.jpg" alt="Look and bag" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/checkered-15.jpg" alt="Look and bag" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/checkered-18.jpg" alt="Look and bag" loading="lazy"></div>` },
+  { id: "blacklight", label: "from the lab · prints made of light", col: 1, row: 3, w: 1300, html: `
+    <h2>florals that glow in the <span class="acc">dark.</span></h2>
+    <div class="split" style="grid-template-columns:0.8fr 1.5fr">
+      <video class="media" src="assets/lab/v-blacklight.mp4" poster="assets/lab/blacklight-04.jpg" muted loop playsinline autoplay controls preload="metadata" aria-label="Blacklight walkthrough"></video>
+      <div style="display:grid;gap:20px;align-content:start">
+        <p class="lede">Florals projected onto black, so the print lives in light instead of fabric. The clip shows how it was made: edit the frames for alternate views, then animate from the first and last frame.</p>
+        <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-00.jpg" alt="Blacklight" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-01.jpg" alt="Blacklight" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-04.jpg" alt="Blacklight" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-12.jpg" alt="Blacklight" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="strip"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-02.jpg" alt="Blacklight" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-05.jpg" alt="Blacklight" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-10.jpg" alt="Blacklight" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-11.jpg" alt="Blacklight" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-06.jpg" alt="Blacklight" loading="lazy"><img class="media" style="--ar:0.8" src="assets/lab/blacklight-13.jpg" alt="Blacklight" loading="lazy"></div>
+    <p class="tools">ChatGPT Images · Seedance</p>` },
+  { id: "field-notes", label: "field notes · point of view", col: 0, row: 3, w: 1300, html: `
+    <h2>the models aren't the hard part. <span class="acc">adoption</span> is.</h2>
+    <p class="lede">A carousel series about what actually changes when creative teams start working with AI.</p>
+    <div class="ggrid" style="grid-template-columns:repeat(3,1fr)"><img class="gallery-img" src="assets/lab/fieldnotes-00.jpg" alt="Field Notes 00" loading="lazy" style="aspect-ratio:4/5"><img class="gallery-img" src="assets/lab/fieldnotes-01.jpg" alt="Field Notes 01" loading="lazy" style="aspect-ratio:4/5"><img class="gallery-img" src="assets/lab/fieldnotes-03.jpg" alt="Field Notes 03" loading="lazy" style="aspect-ratio:4/5"><img class="gallery-img" src="assets/lab/fieldnotes-05.jpg" alt="Field Notes 05" loading="lazy" style="aspect-ratio:4/5"><img class="gallery-img" src="assets/lab/fieldnotes-06.jpg" alt="Field Notes 06" loading="lazy" style="aspect-ratio:4/5"><img class="gallery-img" src="assets/lab/fieldnotes-07.jpg" alt="Field Notes 07" loading="lazy" style="aspect-ratio:4/5"><img class="gallery-img" src="assets/lab/fieldnotes-08.jpg" alt="Field Notes 08" loading="lazy" style="aspect-ratio:4/5"><img class="gallery-img" src="assets/lab/fieldnotes-10.jpg" alt="Field Notes 10" loading="lazy" style="aspect-ratio:4/5"><img class="gallery-img" src="assets/lab/fieldnotes-11.jpg" alt="Field Notes 11" loading="lazy" style="aspect-ratio:4/5"></div>` },
+  { id: "how-i-work", label: "how I work", col: 0, row: 4, w: 1200, html: `
     <h2>people first. the tech has to earn its <span class="acc">place.</span></h2>
     <p class="lede">I lead creative AI strategy and the messy middle that gets pilots shipped, with governance built in. In licensed fashion, that's what separates a demo from production.</p>
     <div class="row4 tear">
@@ -308,10 +365,10 @@ const NODES = [
       <div class="stat"><strong>R</strong><b class="stepb">Rollout</b><span>Scale what earned it.</span></div>
     </div>
     <div class="steps"><div><span class="label">2025 – now</span><b>Senior Director, AI Creative Innovation & Enablement</b><span>Centric Brands</span></div><div><span class="label">2025</span><b>Gen AI Director</b><span>Industrial Color</span></div><div><span class="label">before</span><b>Creative technologist</b><span>Where design met pipelines and the first generative tools</span></div><div><span class="label">20 years</span><b>Designer, generalist</b><span>Merchandising, design, art and creative direction, product development</span></div></div>` },
-  { id: "on-stage", label: "on stage & in print", col: 2, row: 2, w: 1250, html: `
+  { id: "on-stage", label: "on stage & in print", col: 1, row: 4, w: 1250, html: `
     <h2>where creativity and commerce are <span class="acc">headed.</span></h2>
     <div class="press"><div class="press-row"><span class="label">Next</span><span class="label k">Booking</span><b>Your stage</b><span>Keynotes, panels and workshops for 2027</span></div><div class="press-row"><span class="label">Aug 3, 2026</span><span class="label k">Cover</span><b>“Future Focused”</b><span>WWD Daily Edition</span></div><div class="press-row"><span class="label">2026</span><span class="label k">Award</span><b>Visionary</b><span>Sourcing Journal</span></div><div class="press-row"><span class="label">Sep 10, 2026</span><span class="label k">Panel</span><b>The New Fashion Workforce</b><span>Digital Fashion Week NYC</span></div><div class="press-row"><span class="label">Sep 9, 2026</span><span class="label k">Panel</span><b>Rarely Heard Voices</b><span>Amazon, NY Fashion Week</span></div><div class="press-row"><span class="label">Jul 27, 2026</span><span class="label k">Panel</span><b>Visions of Tomorrow</b><span>Sourcing Journal, with Target, Eileen Fisher, True Fit & Unspun</span></div><div class="press-row"><span class="label">Jul 2026</span><span class="label k">Keynote</span><b>The Leader's Role in the AI Era</b><span>The Fashion Tech Show NYC</span></div><div class="press-row"><span class="label">Oct 2025</span><span class="label k">Feature</span><b>Weavy joins Figma</b><span>Featured in Weavy's acquisition story after growing their social following</span></div><div class="press-row"><span class="label">Mar 2024</span><span class="label k">Feature</span><b>Featured Artist</b><span>AI Creative Collective</span></div></div>` },
-  { id: "say-hi", label: "say hi", col: 3, row: 2, w: 1000, html: `
+  { id: "say-hi", label: "say hi", col: 2, row: 4, w: 1000, html: `
     <h2>tell me what you're <span class="acc">making.</span></h2>
     <p class="lede">Keynotes, panels, startup advisory and creative direction. A short note is the fastest way in.</p>
     <p class="mail">megballcreates@gmail.com</p>
@@ -443,10 +500,10 @@ vp.addEventListener("pointerdown", e => {
   if (e.target.closest("video, button, a")) return;
   vp.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
   cancelAnimationFrame(anim);
-  const head = e.target.closest(".node-head");
-  if (head && ptrs.size === 1) {
-    const n = NODES.find(m => m.el === head.parentElement);
-    nodeDrag = { n, x: e.clientX, y: e.clientY, ox: n.x, oy: n.y, odx: n.dx || 0, ody: n.dy || 0, moved: false };
+  const win = e.target.closest(".node");
+  if (win && ptrs.size === 1) {
+    const n = NODES.find(m => m.el === win);
+    nodeDrag = { n, t: e.target, x: e.clientX, y: e.clientY, ox: n.x, oy: n.y, odx: n.dx || 0, ody: n.dy || 0, moved: false };
     return;
   }
   nodeDrag = null;
@@ -477,7 +534,10 @@ const end = e => {
   ptrs.delete(e.pointerId); vp.classList.remove("dragging");
   if (nodeDrag) {
     const g = nodeDrag; nodeDrag = null; g.n.el.classList.remove("moving"); vp.classList.remove("moving-node");
-    if (!g.moved && g.n.i !== current) focusNode(g.n.i);
+    if (!g.moved) {
+      if (g.n.i !== current) focusNode(g.n.i);
+      else if (g.t.matches && g.t.matches("img.media, img.gallery-img")) openLB(g.t);
+    }
     return;
   }
   if (drag && !drag.moved && drag.el) {
