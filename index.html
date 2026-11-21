@@ -410,20 +410,70 @@ function hotWires(i) {
   svg.querySelectorAll("circle").forEach(c => c.classList.toggle("hot", i >= 0 && +c.dataset.n === i));
 }
 function drawWires() {
-  let segs = "", dots = "";
-  const links = [];
-  for (let i = 0; i < NODES.length - 1; i++) links.push([NODES[i], NODES[i + 1]]);
-  links.forEach(([a, b]) => {
-    let p0, p3, c1, c2;
-    if (a.row === b.row) {
-      const fwd = b.x > a.x;
-      p0 = [fwd ? a.x + a.w : a.x, a.y + a.h * .45]; p3 = [fwd ? b.x : b.x + b.w, b.y + b.h * .45];
-      const dx = Math.max(120, Math.abs(p3[0] - p0[0]) * .5) * (fwd ? 1 : -1);
-      c1 = [p0[0] + dx, p0[1]]; c2 = [p3[0] - dx, p3[1]];
-    } else {
-      p0 = [a.x + a.w / 2, a.y + a.h]; p3 = [b.x + b.w / 2, b.y];
-      const dy = Math.max(120, (p3[1] - p0[1]) * .5); c1 = [p0[0], p0[1] + dy]; c2 = [p3[0], p3[1] - dy];
+  // Wire each node to its nearest neighbours (a minimum spanning tree), not the tour order,
+  // so wires stay short, leave from facing sides and avoid passing behind other nodes.
+  const N = NODES.length, PAD = 40;
+  function ports(a, b) {
+    const gx = Math.max(b.x - (a.x + a.w), a.x - (b.x + b.w)), gy = Math.max(b.y - (a.y + a.h), a.y - (b.y + b.h));
+    if (gx >= gy) {
+      const r = b.x > a.x, lo = Math.max(a.y, b.y), hi = Math.min(a.y + a.h, b.y + b.h);
+      let ya, yb;
+      if (hi - lo > 80) { ya = yb = (lo + hi) / 2; }
+      else { ya = Math.min(Math.max(b.y + b.h / 2, a.y + PAD), a.y + a.h - PAD); yb = Math.min(Math.max(a.y + a.h / 2, b.y + PAD), b.y + b.h - PAD); }
+      return { h: true, sa: r ? "r" : "l", sb: r ? "l" : "r", p0: [r ? a.x + a.w : a.x, ya], p3: [r ? b.x : b.x + b.w, yb] };
     }
+    const d = b.y > a.y, lo = Math.max(a.x, b.x), hi = Math.min(a.x + a.w, b.x + b.w);
+    let xa, xb;
+    if (hi - lo > 80) { xa = xb = (lo + hi) / 2; }
+    else { xa = Math.min(Math.max(b.x + b.w / 2, a.x + PAD), a.x + a.w - PAD); xb = Math.min(Math.max(a.x + a.w / 2, b.x + PAD), b.x + b.w - PAD); }
+    return { h: false, sa: d ? "b" : "t", sb: d ? "t" : "b", p0: [xa, d ? a.y + a.h : a.y], p3: [xb, d ? b.y : b.y + b.h] };
+  }
+  function blocked(p0, p3, a, b) {
+    let hits = 0;
+    NODES.forEach(n => {
+      if (n === a || n === b) return;
+      for (let k = 1; k < 24; k++) {
+        const t = k / 24, x = p0[0] + (p3[0] - p0[0]) * t, y = p0[1] + (p3[1] - p0[1]) * t;
+        if (x > n.x - 30 && x < n.x + n.w + 30 && y > n.y - 30 && y < n.y + n.h + 30) { hits++; break; }
+      }
+    });
+    return hits;
+  }
+  const cand = [];
+  for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
+    const a = NODES[i], b = NODES[j], pr = ports(a, b);
+    const len = Math.hypot(pr.p3[0] - pr.p0[0], pr.p3[1] - pr.p0[1]);
+    cand.push({ a, b, pr, w: len + blocked(pr.p0, pr.p3, a, b) * 5000 });
+  }
+  cand.sort((x, y) => x.w - y.w);
+  const par = NODES.map((_, i) => i), find = i => par[i] === i ? i : (par[i] = find(par[i]));
+  const links = [];
+  for (const c of cand) {
+    const ra = find(NODES.indexOf(c.a)), rb = find(NODES.indexOf(c.b));
+    if (ra !== rb) { par[ra] = rb; links.push(c); if (links.length === N - 1) break; }
+  }
+  // spread wires that share a side of the same node so they don't stack
+  const sides = {};
+  links.forEach(l => { [["a", "sa", "p0"], ["b", "sb", "p3"]].forEach(([n, sd, pt]) => {
+    const key = NODES.indexOf(l[n]) + l.pr[sd]; (sides[key] = sides[key] || []).push({ l, n, pt, sd });
+  }); });
+  Object.values(sides).forEach(list => {
+    if (list.length < 2) return;
+    const node = list[0].l[list[0].n], horiz = list[0].l.pr[list[0].sd] === "l" || list[0].l.pr[list[0].sd] === "r";
+    list.sort((u, v) => { const o = (u.n === "a" ? u.l.pr.p3 : u.l.pr.p0), q = (v.n === "a" ? v.l.pr.p3 : v.l.pr.p0); return horiz ? o[1] - q[1] : o[0] - q[0]; });
+    const span = horiz ? node.h : node.w, base = horiz ? node.y : node.x, step = Math.min(70, (span - PAD * 2) / list.length);
+    const mid = list.reduce((s, e) => s + e.l.pr[e.pt][horiz ? 1 : 0], 0) / list.length;
+    list.forEach((e, k) => {
+      let v = mid + (k - (list.length - 1) / 2) * step;
+      v = Math.min(Math.max(v, base + PAD), base + span - PAD);
+      e.l.pr[e.pt][horiz ? 1 : 0] = v;
+    });
+  });
+  let segs = "", dots = "";
+  links.forEach(({ a, b, pr }) => {
+    const { p0, p3 } = pr; let c1, c2;
+    if (pr.h) { const dir = p3[0] > p0[0] ? 1 : -1, k = Math.max(60, Math.abs(p3[0] - p0[0]) * .5) * dir; c1 = [p0[0] + k, p0[1]]; c2 = [p3[0] - k, p3[1]]; }
+    else { const dir = p3[1] > p0[1] ? 1 : -1, k = Math.max(60, Math.abs(p3[1] - p0[1]) * .5) * dir; c1 = [p0[0], p0[1] + k]; c2 = [p3[0], p3[1] - k]; }
     const d = `M${p0}C${c1} ${c2} ${p3}`, ia = NODES.indexOf(a), ib = NODES.indexOf(b);
     segs += `<g data-a="${ia}" data-b="${ib}"><path class="glow" d="${d}"/><path class="base" d="${d}"/><path class="flow" d="${d}"/></g>`;
     dots += `<circle data-n="${ia}" cx="${p0[0]}" cy="${p0[1]}" r="9"/><circle data-n="${ib}" cx="${p3[0]}" cy="${p3[1]}" r="9"/>`;
