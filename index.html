@@ -197,7 +197,62 @@ button:hover { box-shadow: 0 0 22px rgba(152,203,242,.45); border-color: var(--s
 @keyframes blink { 50% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .prompt .caret { animation: none; } }
 /* step counter as a pill */
-.nav output { border: 1px solid rgba(152,203,242,.45); border-radius: 999px; padding: 8px 16px; max-width: 46ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: rgba(16,16,20,.6); }
+.nav output { border: 1px solid rgba(152,203,242,.45); border-radius: 999px; padding: 8px 16px; max-width: min(46ch, 42vw); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: rgba(16,16,20,.6); }
+
+/* ---- Phones: no canvas. The same cards stacked in tour order, sized to read. */
+html.m, html.m body { height: auto; }
+html.m body { overflow-x: hidden; overflow-y: auto; }
+html.m #viewport { position: static; overflow: visible; touch-action: auto; cursor: auto; min-height: 100vh;
+  background: radial-gradient(rgba(140,143,150,.18) 1px, transparent 1.1px) 0 0 / 22px 22px, var(--ground); }
+html.m #world { position: static; transform: none !important; display: flex; flex-direction: column; gap: 18px;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
+html.m #wires { display: none; }
+html.m .node { position: relative; left: auto !important; top: auto !important; width: auto !important; border-radius: 18px; cursor: auto; touch-action: auto; user-select: auto; -webkit-user-select: auto; box-shadow: 0 14px 30px rgba(0,0,0,.35); scroll-margin-top: 16px; }
+html.m .node.on { box-shadow: 0 14px 30px rgba(0,0,0,.35); border-color: var(--card-line); }
+html.m .node.sky.on, html.m .node.bone.on { border-color: transparent; }
+html.m .node-head { font-size: 11px; padding: 14px 16px 0; gap: 10px; }
+html.m .node-head span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.m .node-body { padding: 12px 16px 20px; gap: 16px; }
+html.m .node h2 { font-size: 27px; line-height: 1.12; }
+html.m .node p { font-size: 15px; line-height: 1.5; }
+html.m .title-node h1 { font-size: 34px; line-height: 1.06; }
+html.m .title-node .tag { font-size: 16px; }
+html.m .intro { grid-template-columns: 1fr; gap: 16px; }
+html.m .headshot { width: 132px; aspect-ratio: 1; }
+html.m .row4, html.m .row3 { grid-template-columns: repeat(2, 1fr) !important; gap: 14px; }
+html.m .intro + .row4 { grid-template-columns: repeat(3, 1fr) !important; }
+html.m .stat strong, html.m .tear .stat strong { font-size: 28px; }
+html.m .stat span { font-size: 13px; }
+html.m .split, html.m .two { grid-template-columns: 1fr !important; gap: 16px; }
+html.m .ggrid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
+html.m .flow { grid-template-columns: repeat(2, 1fr); padding-bottom: 0; }
+html.m .loop, html.m .loop-txt { display: none; }
+html.m .cap { font-size: 14px; } html.m .cap b, html.m .steps b, html.m .stepb { font-size: 16px; }
+html.m .steps span:not(.label), html.m .flow span:not(.label) { font-size: 14px; }
+html.m .label { font-size: 11px; }
+html.m .box p, html.m .params > div { font-size: 14px; } html.m .params > div { grid-template-columns: 1fr; gap: 4px; }
+html.m .press-row { grid-template-columns: 1fr; row-gap: 2px; } html.m .press-row > * { grid-column: 1 !important; } html.m .press-row b { font-size: 16px; }
+html.m .q { font-size: 17px; grid-template-columns: 26px 1fr; } html.m .q span { font-size: 13px; }
+html.m .mail { font-size: 24px; word-break: break-all; }
+html.m .mono-mail, html.m .tools { font-size: 12px; } html.m .tools { flex-wrap: wrap; }
+html.m .cta button, html.m .btn { font-size: 13px; padding: 10px 16px; }
+html.m .prompt { min-width: 0; width: 100%; font-size: 15px; padding: 12px 16px; }
+html.m .prompt i { font-size: 20px; }
+/* image strips become swipeable rows */
+html.m .strip { overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+html.m .strip::-webkit-scrollbar { display: none; }
+html.m .strip > * { flex: 0 0 auto; height: 230px; width: auto; scroll-snap-align: start; }
+html.m .strip > .mwrap { aspect-ratio: var(--ar); }
+html.m .media[style*="max-height"] { max-height: 300px !important; }
+html.m video.media { max-height: 62vh; object-fit: cover; }
+html.m .strip > .mwrap video { max-height: none; }
+html.m .expand { font-size: 12px; padding: 7px 12px; top: 10px; right: 10px; }
+html.m img.media, html.m img.gallery-img { cursor: zoom-in; }
+/* HUD on phones: prev, a short counter, next */
+html.m #hud { justify-content: center; padding-top: 22px; }
+html.m .brand, html.m #full { display: none; }
+html.m .nav output { min-width: 0; max-width: none; font-size: 11px; padding: 8px 12px; }
+html.m .tools button { padding: 9px 12px; }
 /* HUD */
 #hud { position: fixed; left: 0; right: 0; bottom: 0; display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between;
   padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
@@ -411,6 +466,8 @@ const NODES = [
     <p class="tools">© 2026 Meg Ball</p>` },
 ];
 const COL = 1450, ROWGAP = 220;
+const MOBILE = matchMedia("(max-width: 760px)").matches;
+if (MOBILE) document.documentElement.classList.add("m");
 const THEME = { "hello": "sky", "colorway-slot-machine": "sky", "orchid-nebula": "bone", "editorial-to-tech-pack": "bone", "bloom-room": "bone" };
 
 const world = document.getElementById("world"), vp = document.getElementById("viewport"), svg = document.getElementById("wires");
@@ -561,17 +618,19 @@ function setMedia(on) {
     else v.pause();
   }));
 }
-function focusNode(i, fromHash) {
+function focusNode(i, fromHash, fromScroll) {
   current = i; const n = NODES[i];
   NODES.forEach(m => m.el.classList.toggle("on", m === n)); hotWires(NODES.indexOf(n));
-  fly(target({ x: n.x, y: n.y, w: n.w, h: n.h }, Math.min(60, vp.clientWidth * .04)));
-  where.textContent = `${String(i + 1).padStart(2, "0")} / ${NODES.length} · ${n.label}`;
+  if (MOBILE) { if (!fromScroll) n.el.scrollIntoView({ behavior: reduce || fromHash ? "auto" : "smooth", block: "start" }); }
+  else fly(target({ x: n.x, y: n.y, w: n.w, h: n.h }, Math.min(60, vp.clientWidth * .04)));
+  where.textContent = MOBILE ? `${String(i + 1).padStart(2, "0")} / ${NODES.length}` : `${String(i + 1).padStart(2, "0")} / ${NODES.length} · ${n.label}`;
   setMedia(n);
   if (!fromHash && location.hash !== "#" + n.id) history.replaceState(null, "", "#" + n.id);
 }
 function overview() {
   current = -1; NODES.forEach(m => m.el.classList.remove("on")); hotWires(-1); setMedia(null);
-  fly(target(bounds(), 40)); where.textContent = "Overview";
+  if (MOBILE) scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); else fly(target(bounds(), 40));
+  where.textContent = MOBILE ? "Top" : "Overview";
   if (location.hash) history.replaceState(null, "", location.pathname + location.search);
 }
 document.getElementById("next").onclick = () => focusNode(Math.min(NODES.length - 1, current + 1));
@@ -592,7 +651,7 @@ addEventListener("keydown", e => {
 // ---- pan, zoom, click-to-focus
 const ptrs = new Map(); let drag = null, pinch = null, nodeDrag = null;
 vp.addEventListener("pointerdown", e => {
-  if (e.target.closest("video, button, a")) return;
+  if (MOBILE || e.target.closest("video, button, a")) return;
   vp.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
   cancelAnimationFrame(anim);
   const win = e.target.closest(".node");
@@ -643,11 +702,13 @@ const end = e => {
   if (ptrs.size < 2) pinch = null; drag = null;
 };
 vp.addEventListener("dblclick", e => {
+  if (MOBILE) return;
   const head = e.target.closest(".node-head"); if (!head) return;
   const n = NODES.find(m => m.el === head.parentElement); n.dx = n.dy = 0; layout();
 });
 vp.addEventListener("pointerup", end); vp.addEventListener("pointercancel", end);
 vp.addEventListener("wheel", e => {
+  if (MOBILE) return;
   e.preventDefault(); cancelAnimationFrame(anim);
   const k = Math.exp(-e.deltaY * (e.ctrlKey ? .01 : .0015)), s = Math.max(.05, Math.min(2, cam.s * k));
   cam.x = e.clientX - (e.clientX - cam.x) * s / cam.s; cam.y = e.clientY - (e.clientY - cam.y) * s / cam.s; cam.s = s; apply();
@@ -678,14 +739,34 @@ world.querySelectorAll("video.media").forEach(v => {
 window.go = i => focusNode(i);
 // ---- boot
 function boot() {
+  if (MOBILE) return bootMobile();
   layout();
   const i = NODES.findIndex(n => "#" + n.id === location.hash);
   Object.assign(cam, target(bounds(), 40)); apply();
   if (i >= 0) focusNode(i, true); else where.textContent = "Overview";
 }
+function bootMobile() {
+  // tap an image to expand it
+  world.addEventListener("click", e => { const t = e.target; if (t.matches && t.matches("img.media, img.gallery-img")) openLB(t); });
+  // counter and video follow whatever card is on screen
+  const seen = new Map();
+  const io = new IntersectionObserver(es => {
+    es.forEach(en => seen.set(en.target, en.intersectionRatio));
+    let best = null, r = 0; seen.forEach((v, el) => { if (v > r) { r = v; best = el; } });
+    if (!best) return; const i = NODES.findIndex(n => n.el === best);
+    if (i !== current && r > .15) { current = i; where.textContent = `${String(i + 1).padStart(2, "0")} / ${NODES.length}`; setMedia(NODES[i]);
+      if (location.hash !== "#" + NODES[i].id) history.replaceState(null, "", "#" + NODES[i].id); }
+  }, { threshold: [0, .15, .3, .5, .7, .9] });
+  NODES.forEach(n => io.observe(n.el));
+  NODES.forEach(n => n.el.querySelectorAll("video").forEach(v => { v.muted = true; v.playsInline = true; }));
+  const i = NODES.findIndex(n => "#" + n.id === location.hash);
+  if (i >= 0) focusNode(i, true); else where.textContent = "01 / " + NODES.length;
+}
+// crossing the phone breakpoint swaps layouts, so reload into the right one
+matchMedia("(max-width: 760px)").addEventListener("change", e => { if (e.matches !== MOBILE) location.reload(); });
 addEventListener("hashchange", () => { const i = NODES.findIndex(n => "#" + n.id === location.hash); if (i >= 0 && i !== current) focusNode(i, true); });
-let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { layout(); current >= 0 ? focusNode(current, true) : overview(); }, 150); });
-world.querySelectorAll("img, video").forEach(m => m.addEventListener(m.tagName === "IMG" ? "load" : "loadedmetadata", () => { clearTimeout(rt); rt = setTimeout(() => { layout(); if (current >= 0) focusNode(current, true); else { Object.assign(cam, target(bounds(), 40)); apply(); } }, 120); }));
+let rt; addEventListener("resize", () => { if (MOBILE) return; clearTimeout(rt); rt = setTimeout(() => { layout(); current >= 0 ? focusNode(current, true) : overview(); }, 150); });
+world.querySelectorAll("img, video").forEach(m => m.addEventListener(m.tagName === "IMG" ? "load" : "loadedmetadata", () => { if (MOBILE) return; clearTimeout(rt); rt = setTimeout(() => { layout(); if (current >= 0) focusNode(current, true); else { Object.assign(cam, target(bounds(), 40)); apply(); } }, 120); }));
 (document.fonts ? document.fonts.ready : Promise.resolve()).then(boot);
 </script>
 
